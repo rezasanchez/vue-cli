@@ -1,28 +1,41 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+  <div id="app" class="container mt-5">
+    <h1>IDSHop</h1>
+    <price-slider
+      :sliderStatus="style.sliderStatus"
+      :maximum.sync="maximum"
+    ></price-slider>
+    <product-list :products="products" :maximum="maximum"></product-list>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+// import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+// eslint-disable-next-line no-unused-vars
+import PriceSlider from "./components/PriceSlider.vue";
+import ProductList from "./components/ProductList.vue";
 
 export default {
   name: "App",
+  data: function () {
+    return {
+      maximum: 50,
+      products: [],
+      cart: [],
+      sliderStatus: true,
+    };
+  },
   components: {
-    HelloWorld,
+    PriceSlider,
+    ProductList,
+    // FontAwesomeIcon,
+  },
+  mounted: function () {
+    fetch("https://hplussport.com/api/products/order/price")
+      .then((response) => response.json())
+      .then((data) => {
+        this.products = data;
+      });
   },
 };
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
